@@ -40,6 +40,11 @@ namespace web2
             this.DateOfBirth = DateOfBirth;
         }
 
+        public void Display()
+        {
+            Console.WriteLine($"ID: {ID} Имя: {Name}  Фамилия: {Surname}  DateOfBirth: {DateOfBirth}");
+        }
+
     }
 
     public class Publisher
@@ -57,6 +62,10 @@ namespace web2
         public void ChangeName(string k)
         {
             Name = k;
+        }
+        public void Display()
+        {
+            Console.WriteLine($"ID: {ID} Имя: {Name}");
         }
     }
 
@@ -76,13 +85,17 @@ namespace web2
         {
             Name = k;
         }
+        public void Display()
+        {
+            Console.WriteLine($"ID: {ID} Имя: {Name}");
+        }
     }
 
     public class Book
     {
         public
             int ID, AuthorID, PublisherID;
-            string Name, ReleaseDate;
+        public string Name, ReleaseDate;
             List<int> GenreIDs;
         public Book(int ID, int AuthorID, int PublisherID, string Name, string ReleaseDate, List<int> GenreIDs)
         {
@@ -128,6 +141,12 @@ namespace web2
         {
             return GenreIDs.Remove(k);
         }
+
+        public void Display()
+        {
+            Console.WriteLine($"ID: {ID} Название: {Name}  Дата выхода: {ReleaseDate}  ID автора: {AuthorID}  ID издания: {PublisherID}");
+            Console.WriteLine("??????????");
+        }
     }
 
     public class AuthorManager
@@ -163,7 +182,7 @@ namespace web2
         }
 
 
-        public bool CheckAuthorID (int k)
+        public bool CheckID (int k)
         {
             for (int i = 0; i < data.Count; i++)
             {
@@ -174,10 +193,6 @@ namespace web2
             }
             return false;
         }
-
-
-        //●	Изменить
-
     }
 
     public class PublisherManager
@@ -196,6 +211,29 @@ namespace web2
         public List<Publisher> Data()
         {
             return data;
+        }
+
+        public dynamic GetByID(int k)
+        {
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (data[i].ID == k)
+                {
+                    return data[i];
+                }
+            }
+            return false;
+        }
+        public bool CheckID(int k)
+        {
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (data[i].ID == k)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
@@ -216,6 +254,29 @@ namespace web2
         {
             return data;
         }
+        public dynamic GetByID(int k)
+        {
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (data[i].ID == k)
+                {
+                    return data[i];
+                }
+            }
+            return false;
+        }
+
+        public bool CheckID(int k)
+        {
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (data[i].ID == k)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     public class BookManager
@@ -235,9 +296,35 @@ namespace web2
         {
             return data;
         }
+
+        public dynamic GetByID(int k)
+        {
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (data[i].ID == k)
+                {
+                    return data[i];
+                }
+            }
+            return false;
+        }
+
+        public bool CheckID(int k)
+        {
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (data[i].ID == k)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
+
     public class CashManager
     {
+        public DepotManager Depot;
         public void AllAuthor()
         {
             ;
@@ -258,35 +345,84 @@ namespace web2
             ;
         }
 
-        public void BuyBookByID()
-        {
-            ;
+
+        public dynamic SellBookByID(int k) {
+            if (Depot.CheckBookByID(k)==true)
+            {
+                Depot.RemoveBookByID(k);
+                return true;
+            }
+            return false;
         }
-
-
-        ///●	Продать книгу
     }
 
     public class DepotManager
     {
         public
-           List<int> data;//id of books
+           AuthorManager Authors;
+           PublisherManager Publishers;
+           GenreManager Genres;
+           BookManager Books;
 
-
-        public void Add(int k)
+        public bool RemoveBookByID(int k) // удаляет элемент item из списка, и если удаление прошло успешно, то возвращает true
         {
-            data.Add(k);
+            return Books.Remove(Books.GetByID(k));
+        }
+        public void AddPublisher(Publisher k)
+        {
+            Publishers.Add(k);
+
+        }
+        public void AddAuthor(Author k)
+        {
+            Authors.Add(k);
+
+        }
+        public void AddGenre(Genre k)
+        {
+            Genres.Add(k);
+
+        }
+        public void AddBook(Book k)
+        {
+            Books.Add(k);
+
         }
 
-        public bool Remove(int k) 
+        public void DisplayAllBooks()
         {
-            return data.Remove(k);
+            for (int i = 0; i < Books.data.Count; i++)
+            {
+                Books.data[i].Display();
+            }
         }
+        public void DisplayAllGenres()
+        {
+            for (int i = 0; i < Genres.data.Count; i++)
+            {
+                Genres.data[i].Display();
+            }
+        }
+        public void DisplayAllAuthors()
+        {
+            for (int i = 0; i < Authors.data.Count; i++)
+            {
+                Authors.data[i].Display();
+            }
+        }
+        public void DisplayAllPublishers()
+        {
+            for (int i = 0; i < Publishers.data.Count; i++)
+            {
+                Publishers.data[i].Display();
+            }
+        }
+
         public bool CheckBookByID(int k)
         {
-            for (int i = 0; i < data.Count; i++)
+            for (int i = 0; i < Books.data.Count; i++)
             {
-                if (data[i] == k)
+                if (Books.data[i].ID == k)
                 {
                     return true;
                 }

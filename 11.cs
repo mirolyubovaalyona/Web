@@ -4,7 +4,7 @@ namespace WEB
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main11(string[] args)
         {
             Console.WriteLine("Hello World!");
         }

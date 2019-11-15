@@ -6,7 +6,7 @@ namespace WEB1
 {
     class _16
     {
-        static void Main(string[] args)
+        static void Main16(string[] args)
         {
             Console.WriteLine("длинный текст?");
             string str = Console.ReadLine();

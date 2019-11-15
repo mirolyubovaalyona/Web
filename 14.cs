@@ -6,7 +6,7 @@ namespace WEB1
 {
     class _14
     {
-        static void Main(string[] args)
+        static void Main14(string[] args)
         {
             Console.WriteLine("по убыванию или по возрастанию сортировать?");
             string s = Console.ReadLine();

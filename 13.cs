@@ -5,7 +5,7 @@ using System.Text;
 namespace WEB1
 {
     class _13 {
-        static void Main(string[] args) {
+        static void Main13(string[] args) {
             int l, max, min;
             string s = Console.ReadLine();
             string[] tmp = s.Split(' ');
@@ -16,7 +16,7 @@ namespace WEB1
             Random rand = new Random();
             for (int i = 0; i < l; i++)
             {
-                a[i] = rand.Next(min, max);
+                a[i] = rand.Next(min, max+1);
                 Console.Write(a[i] + " ");
             }
         }

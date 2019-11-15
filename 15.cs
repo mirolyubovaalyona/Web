@@ -6,7 +6,7 @@ namespace WEB1
 {
     class _15
     {
-        static void Main(string[] args)
+        static void Main15(string[] args)
         {
             Console.WriteLine("1) =((-b+-((b)^2-4ac))^(1/2))/(2a)");
             Console.WriteLine("2) =(xy)/((x^2)+(y^2)+5)^(1/2)");

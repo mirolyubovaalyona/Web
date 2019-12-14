@@ -17,17 +17,22 @@ namespace WebApplication7
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".MyApp.Session";
+                options.IdleTimeout = TimeSpan.FromSeconds(3600);
+                options.Cookie.IsEssential = true;
+            });
             services.AddTransient<IMessageSender, EmailMessageSender>();
+            services.AddTransient<MessageService>();
             //services.AddTransient<IMessageSender, SmsMessageSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, Microsoft.Extensions.Hosting.IHostingEnvironment env, IMessageSender messageSender)
+        public void Configure(IApplicationBuilder app, IMessageSender messageSender, MessageService messageService)
             {
-                if (env.IsDevelopment())
-                {
-                    app.UseDeveloperExceptionPage();
-                }
+               
 
                 app.Run(async (context) =>
                 {

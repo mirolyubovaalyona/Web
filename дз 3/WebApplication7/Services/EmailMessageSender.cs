@@ -10,6 +10,17 @@ namespace WebApplication7
     {
         public string Send()
         {
+            app.UseSession();   // добавляем механизм работы с сессиями
+            app.Run(async (context) =>
+            {
+                if (context.Session.Keys.Contains("name"))
+                    await context.Response.WriteAsync($"Hello {context.Session.GetString("name")}!");
+                else
+                {
+                    context.Session.SetString("name", "Tom");
+                    await context.Response.WriteAsync("Hello World!");
+                }
+            });
             return "Sent by Email";
         }
     }

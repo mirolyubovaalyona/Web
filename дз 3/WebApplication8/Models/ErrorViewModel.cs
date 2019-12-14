@@ -1,0 +1,12 @@
+using System;
+using WebApplication8.Models;
+
+namespace WebApplication8.Models
+{
+    public class ErrorViewModel
+    {
+        public string RequestId { get; set; }
+
+        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+    }
+}

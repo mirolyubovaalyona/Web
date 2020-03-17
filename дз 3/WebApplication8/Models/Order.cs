@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApplication8.Models;
 
 namespace WebApplication8.Models
 {
@@ -16,4 +15,5 @@ namespace WebApplication8.Models
         public int PhoneId { get; set; } // ссылка на связанную модель Phone
         public Phone Phone { get; set; }
     }
+
 }

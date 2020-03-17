@@ -34,6 +34,7 @@ namespace WebApplication3
         private static void A(IApplicationBuilder app)
         {
             int a = 1000;
+            
             int b = 1;
             int c = 100;
             app.Run(async context =>

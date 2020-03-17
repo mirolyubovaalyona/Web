@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebApplication8.Models;   // пространство имен моделей
+using WebApplication8.Models;   // пространство имен моделей
+using Microsoft.EntityFrameworkCore; // пространство имен EntityFramework
 
 namespace WebApplication8
 {
@@ -26,16 +27,12 @@ namespace WebApplication8
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<MobileContext>(options => options.UseSqlServer(connection));
             services.AddControllersWithViews();
+            services.AddDbContext<MobileContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+
             app.UseDeveloperExceptionPage();
 
             app.UseStaticFiles();

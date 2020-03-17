@@ -26,7 +26,7 @@ namespace WebApplication6
 
                 app.Run(async (context) =>
                 {
-                    await context.Response.WriteAsync("/index.html для обращения к статическому файлу");
+                    await context.Response.WriteAsync("/index.html to access a static file");
                 });
             
         }

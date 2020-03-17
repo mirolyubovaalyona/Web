@@ -19,15 +19,9 @@ namespace WebApplication4
         public async Task InvokeAsync(HttpContext context)
         {
             var f = context.Request.Query["f"];
-            if (f != pattern)
-            {
-                context.Response.StatusCode = 403;
-                await context.Response.WriteAsync("/?f=1 to count the formulas");
-            }
-            else
-            {
-                await _next.Invoke(context);
-            }
+                int intf = int.Parse(f);
+                await context.Response.WriteAsync($"\n a = f * 2 = {intf * 2}");
+           
         }
     }
 }

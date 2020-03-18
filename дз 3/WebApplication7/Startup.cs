@@ -5,39 +5,55 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebApplication7.Services;
 
-namespace WebApplication7
+namespace Web3._7
 {
     public class Startup
     {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
             services.AddDistributedMemoryCache();
-            services.AddSession(options =>
-            {
-                options.Cookie.Name = ".MyApp.Session";
-                options.IdleTimeout = TimeSpan.FromSeconds(3600);
-                options.Cookie.IsEssential = true;
-            });
-            services.AddTransient<IMessageSender, EmailMessageSender>();
-            services.AddTransient<MessageService>();
-            //services.AddTransient<IMessageSender, SmsMessageSender>();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IMessageSender messageSender, MessageService messageService)
-            {
-               
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            app.UseSession();
+            app.Map("/Email", Email);
+            app.Map("/SMS", SMS);
+        }
 
-                app.Run(async (context) =>
-                {
-                    await context.Response.WriteAsync(messageSender.Send());
-                });
-            }
+        private void Email(IApplicationBuilder app)
+        {
+            app.Run(async (context) =>
+            {
+                var m = new MessageService(new EmailMessageSender(context));
+                m.Send();
+            });
+        }
+
+        private void SMS(IApplicationBuilder app)
+        {
+            app.Run(async (context) =>
+            {
+                var m = new MessageService(new SmsMessageSender(context));
+                m.Send();
+            });
+        }
     }
 }

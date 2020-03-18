@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplication7.Services
+namespace Web3._7
 {
     public class MessageService
     {
-        IMessageSender _sender;
+        IMessageSender s;
         public MessageService(IMessageSender sender)
         {
-            _sender = sender;
+            s = sender;
         }
-        public string Send()
+        public void Send()
         {
-            return _sender.Send();
+             s.Send();
         }
     }
 }

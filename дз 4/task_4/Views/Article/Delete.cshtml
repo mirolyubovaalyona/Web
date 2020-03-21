@@ -1,0 +1,20 @@
+﻿@model task_4.Models.Entities.Article
+@{
+	ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+@Html.DisplayForModel()
+
+<div>
+	<form asp-controller="Article" asp-action="Delete" method="post">
+		<div>
+			<input type="submit" class="btn" value="Delete" />
+		</div>
+	</form>
+</div>
+
+<div>
+	<a class="nav-link text-dark" asp-area="" asp-controller="Article" asp-action="Index">Back</a>
+</div>

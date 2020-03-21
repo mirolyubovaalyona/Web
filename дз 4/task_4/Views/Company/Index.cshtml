@@ -1,0 +1,21 @@
+﻿@model IEnumerable<task_4.Models.Entities.Company>
+@{
+	ViewData["Title"] = "Companies";
+}
+
+<body>
+	<h3>Companies</h3>
+	<table>
+		@foreach (var company in Model)
+		{
+			<tr>
+				<td>@company.Name</td>
+				<td>@company.Address</td>
+				<td><a href="~/Company/Details/@company.Id">Детали</a></td>
+				<td><a href="~/Company/Edit/@company.Id">Редактировать</a></td>
+				<td><a href="~/Company/Delete/@company.Id">Удалить</a></td>
+			</tr>
+		}
+	</table>
+	<a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="Create">Добавить</a>
+</body>

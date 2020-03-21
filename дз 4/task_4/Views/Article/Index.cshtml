@@ -1,0 +1,20 @@
+﻿@model IEnumerable<task_4.Models.Entities.Article>
+@{
+	ViewData["Title"] = "Articles";
+}
+
+<body>
+	<h3>Articles</h3>
+	<table>
+		@foreach (var article in Model)
+		{
+			<tr>
+				<td>@article.Name</td>
+				<td><a href="~/Article/Details/@article.Id">Детали</a></td>
+				<td><a href="~/Article/Edit/@article.Id">Редактировать</a></td>
+				<td><a href="~/Article/Delete/@article.Id">Удалить</a></td>
+			</tr>
+		}
+	</table>
+	<a class="nav-link text-dark" asp-area="" asp-controller="Article" asp-action="Create">Добавить</a>
+</body>

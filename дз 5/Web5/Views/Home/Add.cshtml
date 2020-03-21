@@ -1,0 +1,25 @@
+﻿@model FilterSortPagingApp.Models.Film
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Новый фильм</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(model => model.name, "Имя фильма")
+    <br />
+    @Html.EditorFor(model => model.name)
+    <br />
+    @Html.LabelFor(model => model.Genre.Name, "Жанр")
+    <br />
+    @Html.EditorFor(model => model.Genre.Name)
+    <br />
+    @Html.LabelFor(model => model.year, "Год выхода")
+    <br />
+    @Html.EditorFor(model => model.year)
+    <br />
+    <br />
+    <input type="submit" value="Добавить" />
+}

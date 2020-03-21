@@ -1,0 +1,119 @@
+﻿@using FilterSortPagingApp.Models
+@model IndexViewModel
+
+@{
+	ViewData["Title"] = "Home Page";
+}
+<style>
+	@@font-face {
+		font-family: 'FontAwesome';
+		src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype');
+		font-weight: normal;
+		font-style: normal
+	}
+
+	.glyphicon {
+		display: inline-block;
+		font: normal normal normal 14px/1 FontAwesome;
+		font-size: inherit;
+		text-rendering: auto;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale
+	}
+
+	.glyphicon-chevron-right:before {
+		content: "\f054";
+	}
+
+	.glyphicon-chevron-left:before {
+		content: "\f053";
+	}
+</style>
+<h1>Список фильмов</h1>
+<form method="get">
+	<div class="form-inline">
+		<h5>
+			<label>Название: </label>
+			<input name="name" value="@Model.FilterViewModel.SelectedName" class="form-control" />
+		</h5>
+
+		<h5>
+			<label>Жанр: </label>
+			<select name="genre" asp-items="Model.FilterViewModel.Genres" class="form-control"></select>
+		</h5>
+
+		<input type="submit" value="Фильтр" class="btn btn-outline-dark" />
+	</div>
+</form>
+
+<table class="table">
+	<tr>
+		<th>
+			<a asp-action="Index"
+			   asp-route-sortOrder="@(Model.SortViewModel.NameSort)"
+			   asp-route-name="@(Model.FilterViewModel.SelectedName)"
+			   asp-route-company="@(Model.FilterViewModel.SelectedGenre)">Название</a>
+		</th>
+		<th>
+			<a asp-action="Index" asp-route-sortOrder="@(Model.SortViewModel.ExpSort)"
+			   asp-route-name="@(Model.FilterViewModel.SelectedName)"
+			   asp-route-company="@(Model.FilterViewModel.SelectedGenre)">Дата выпуска</a>
+		</th>
+		<th>
+			<a asp-action="Index" asp-route-sortOrder="@(Model.SortViewModel.CompanySort)"
+			   asp-route-name="@(Model.FilterViewModel.SelectedName)"
+			   asp-route-company="@(Model.FilterViewModel.SelectedGenre)">Жанр</a>
+		</th>
+		<th>
+			<a>Дни</a>
+		</th>
+		<th>
+			<a>Часы</a>
+		</th>
+		<th>
+			<a>Минуты</a>
+		</th>
+		<th>
+			<a>Секунды</a>
+		</th>
+	</tr>
+	<p>
+		<a asp-action="Add">Добавить</a>
+	</p>
+	@foreach (Film u in Model.Films)
+	{
+		<tr>
+			<td>@u.name</td>
+			<td>@u.year</td>
+			<td>@u.Genre.Name</td>
+			<td>@u.Lifetime.Days</td>
+			<td>@u.Lifetime.Hours</td>
+			<td>@u.Lifetime.Minutes</td>
+			<td>@u.Lifetime.Seconds</td>
+		</tr>
+	}
+</table>
+@if (Model.PageViewModel.HasPreviousPage)
+{
+	<a asp-action="Index"
+	   asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+	   asp-route-name="@(Model.FilterViewModel.SelectedName)"
+	   asp-route-company="@(Model.FilterViewModel.SelectedGenre)"
+	   asp-route-sortorder="@(Model.SortViewModel.Current)"
+	   class="btn  btn-outline-dark">
+		<i class="glyphicon glyphicon-chevron-left"></i>
+		Назад
+	</a>
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+	<a asp-action="Index"
+	   asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+	   asp-route-name="@(Model.FilterViewModel.SelectedName)"
+	   asp-route-company="@(Model.FilterViewModel.SelectedGenre)"
+	   asp-route-sortorder="@(Model.SortViewModel.Current)"
+	   class="btn btn-outline-dark">
+		Вперед
+		<i class="glyphicon glyphicon-chevron-right"></i>
+	</a>
+}

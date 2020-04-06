@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Список</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <h2>Список авторов</h2>
+    <table class="table table-bordered  col-md-6">
+        <thead><tr><th>Id</th><th>ФИО</th><th>Год рождения</th><th></th></tr></thead>
+        <tbody>
+        </tbody>
+    </table>
+    <form name="authorForm">
+        <input type="hidden" name="id" value="0" />
+        <div class="form-group col-md-5">
+            <label for="name">ФИО:</label>
+            <input class="form-control" name="name" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="birthday">Год рождения:</label>
+            <input class="form-control" name="birthday" type="number" />
+        </div>
+        <div class="panel-body">
+            <button type="submit" id="submit" class="btn btn-primary">Сохранить</button>
+            <a id="reset" class="btn btn-primary">Сбросить</a>
+        </div>
+    </form>
+    <script>
+        async function GetAuthors() {
+            const response = await fetch("/api/authors", {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const authors = await response.json();
+                let rows = document.querySelector("tbody");
+                authors.forEach(author => {
+                    rows.append(row(author));
+                });
+            }
+        }
+        async function GetAuthor(id) {
+            const response = await fetch("/api/authors/" + id, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const author = await response.json();
+                const form = document.forms["authorForm"];
+                form.elements["id"].value = author.id;
+                form.elements["name"].value = author.name;
+                form.elements["birthday"].value = author.birthday;
+            }
+        }
+        async function CreateAuthor(authorName, authorBirthday) {
+
+            const response = await fetch("api/authors", {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: authorName,
+                    birthday: parseInt(authorBirthday, 10)
+                })
+            });
+            if (response.ok === true) {
+                const author = await response.json();
+                reset();
+                document.querySelector("tbody").append(row(author));
+            }
+        }
+        async function EditAuthor(authorId, authorName, authorBirthday) {
+            const response = await fetch("api/authors", {
+                method: "PUT",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: parseInt(authorId, 10),
+                    name: authorName,
+                    birthday: parseInt(authorBirthday, 10)
+                })
+            });
+            if (response.ok === true) {
+                const author = await response.json();
+                reset();
+                document.querySelector("tr[data-rowid='" + author.id + "']").replaceWith(row(author));
+            }
+        }
+        async function DeleteAuthor(id) {
+            const response = await fetch("/api/authors/" + id, {
+                method: "DELETE",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const author = await response.json();
+                document.querySelector("tr[data-rowid='" + author.id + "']").remove();
+            }
+        }
+
+        function reset() {
+            const form = document.forms["authorForm"];
+            form.reset();
+            form.elements["id"].value = 0;
+        }
+
+        function row(author) {
+
+            const tr = document.createElement("tr");
+            tr.setAttribute("data-rowid", author.id);
+
+            const idTd = document.createElement("td");
+            idTd.append(author.id);
+            tr.append(idTd);
+
+            const nameTd = document.createElement("td");
+            nameTd.append(author.name);
+            tr.append(nameTd);
+
+            const birthdayTd = document.createElement("td");
+            birthdayTd.append(author.birthday);
+            tr.append(birthdayTd);
+
+            const linksTd = document.createElement("td");
+
+            const editLink = document.createElement("a");
+            editLink.setAttribute("data-id", author.id);
+            editLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            editLink.append("Изменить");
+            editLink.addEventListener("click", e => {
+
+                e.preventDefault();
+                GetAuthor(author.id);
+            });
+            linksTd.append(editLink);
+
+            const removeLink = document.createElement("a");
+            removeLink.setAttribute("data-id", author.id);
+            removeLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            removeLink.append("Удалить");
+            removeLink.addEventListener("click", e => {
+
+                e.preventDefault();
+                DeleteAuthor(author.id);
+            });
+
+            linksTd.append(removeLink);
+            tr.appendChild(linksTd);
+
+            return tr;
+        }
+        
+        document.getElementById("reset").click(function (e) {
+
+            e.preventDefault();
+            reset();
+        })
+
+        document.forms["authorForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["authorForm"];
+            const id = form.elements["id"].value;
+            const name = form.elements["name"].value;
+            const birthday = form.elements["birthday"].value;
+            if (id == 0)
+                CreateAuthor(name, birthday);
+            else
+                EditAuthor(id, name, birthday);
+        });
+
+        GetAuthors();
+
+    </script>
+</body>
+</html>
